@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title_block %}
+article
+{% endblock %}
+{% block body_block %}
+<!-- <h1>Blog List</h1> -->
+{% if Blogs %}
+{% for blog in Blogs %}
+{% if blog.blog_image %}
+<h3>{{blog.blog_title}} </h3>
+<h6><i>{{blog.publish_date}}</i></h6>
+<div class="row">
+<div class="col-sm-4">
+    <img src="/media/{{blog.blog_image}}" alt="{{blog.blog_title}}" width="100%">
+</div>
+<div class="col-sm-8">
+    
+    <p> {{blog.blog_content|range_filter|linebreaks}} <a href="{% url 'app_blog:details' slug=blog.slug %}">Read More</a>  &nbsp; &nbsp; &nbsp;
+        {% if blog.author == user %}
+        <a href="{% url 'app_blog:edit_blog' pk=blog.pk %}">Edit</a>
+        {% endif %}
+    </p>
+    <h6>Posted by : <a href="{% url 'App_Login:profile_others' username=blog.author %}" style="color: black;text-decoration: none;"> {{blog.author}}</a></h6>
+</div>
+</div>
+<hr>
+{% else %}
+<h3>{{blog.blog_title}} </h3>
+<h6><i>{{blog.publish_date}}</i></h6>
+<div class="row">
+
+<div class="col-sm-12">
+    
+    <p> {{blog.blog_content|range_filter|linebreaks}} <a href="{% url 'app_blog:details' slug=blog.slug %}">Read More</a>  &nbsp; &nbsp; &nbsp;
+        {% if blog.author == user %}
+        <a href="{% url 'app_blog:edit_blog' pk=blog.pk %}">Edit</a>
+        {% endif %}
+    </p>
+    <h6>Posted by : <a href="{% url 'App_Login:profile_others' username=blog.author %}" style="color: black;text-decoration: none;"> {{blog.author}}</a></h6>
+</div>
+</div>
+<hr>
+{% endif %}
+{% endfor %}
+{% else %}
+<h5 style="text-align:center">No article yet</h5>
+{% endif %}
+{% endblock %}

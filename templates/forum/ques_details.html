@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title_block %}
+{{ques.ques_title}}
+{% endblock %}
+{% block css_block %}
+{% endblock %}
+{% block body_block %}
+<div style="background-color: grey;color: white; padding-left: 20px;padding-top: 20px;padding-bottom: 30px;" >{{ques.ques_title}} </div>
+<div style="display: flex;align-items: center; justify-content: center;border-bottom: 1px solid gray;">
+    <div style="width: 10%;text-align: center;min-height: 200px;">
+        {% if ques.author.user_profile.profile_pic %}
+        <a  href="{% url 'App_Login:profile_others' username=ques.author %}"  > 
+            <img src="/media/{{ques.author.user_profile.profile_pic}}" alt="" width="80px" height="80px" class="rounded-circle">
+            </a>
+        {% else %}
+        <a  href="{% url 'App_Login:profile_others' username=ques.author %}"  > 
+            <img src="/media/profile_pics/avatar-male.jpg" alt="" width="80px" height="80px" class="rounded-circle">
+        </a>
+        {% endif %} 
+        
+           <div style="text-align: center;">
+            {{ques.author.username}} <br>
+            <i class="fa fa-user-o" aria-hidden="true"></i> Student
+            
+           </div>
+         
+    </div>
+    <div style="width: 90%; padding-top: 40px;padding-bottom: 30px;background-color: lightgray; padding-left: 20px;min-height: 200px;">
+        <div style="font-size: 16px; padding-bottom: 5px; color: honeydew;" > <b>Question</b> </div>
+        <div style="font-size: 13px; padding-bottom: 10px; color: honeydew;" > {{ques.publish_date}} </div>
+        <div>
+            {{ques.ques_content}}
+            {% if ques.ques_image %}
+            <br>
+            <a href="{% url 'forum:question_image' pk=ques.pk  %}" style="color: black;text-decoration: none;"><i class="fa fa-paperclip" style="font-size: 25px;font-weight: 900;padding-top: 25px;" aria-hidden="true"></i> &nbsp;{{ques.ques_image}} </a>
+            
+            {%endif%}
+            <br>
+            {% if ques.url %}
+            
+            <a href="{% url 'forum:question_url' pk=ques.pk  %}" style="color: black;text-decoration: none;"><i class="fa fa-paperclip" style="font-size: 25px;font-weight: 900;padding-top: 25px;" aria-hidden="true"></i> &nbsp;{{ques.url}} </a>
+            
+            {%endif%}
+        </div>
+    </div>
+    
+</div>
+{% for ans in ques.ques_name.all %}
+<div style="display: flex;align-items: center; justify-content: center;border-bottom: 1px solid gray;">
+    <div style="width: 10%;text-align: center; min-height: 150px;">
+        {% if ans.user.user_profile.profile_pic %}
+        <a  href="{% url 'App_Login:profile_others' username=ans.user %}"  > 
+            <img src="/media/{{ans.user.user_profile.profile_pic}}" alt="" width="80px" height="80px" class="rounded-circle">
+            </a>
+        {% else %}
+        <a  href="{% url 'App_Login:profile_others' username=ans.user %}"  > 
+            <img src="/media/profile_pics/avatar-male.jpg" alt="" width="80px" height="80px" class="rounded-circle">
+        </a>
+        {% endif %} 
+        
+           <div style="text-align: center;">
+            {{ans.user.username}} <br>
+            {% if ans.user.is_student %}
+            <i class="fa fa-user-o" aria-hidden="true"></i> Student
+            {% else %}
+            <i class="fa fa-user-circle" aria-hidden="true"></i> Teacher
+            {% endif %}
+           </div>
+         
+    </div>
+    <div style="width: 90%; padding-top: 40px;padding-bottom: 30px;background-color: lightgray; padding-left: 20px; min-height: 150px;">
+        <div style="font-size: 15px; padding-bottom: 10px; color: honeydew;" > <b>Answer</b> </div>
+        <div>
+            {{ans.ans}}
+        </div>
+    </div>
+    
+</div>
+{% endfor %}
+<br>
+<h3>Leave your answer</h3>
+<form action="" method="POST" enctype="multipart/form-data">
+    {{ ans_form|crispy }}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success btn-sm">submit</button>
+   
+</form>
+
+{% endblock %}

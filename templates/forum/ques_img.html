@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title_block %}
+Attach file
+{% endblock %}
+{% block body_block %}
+{% if img %}
+<div>
+    <img src="/media/{{ques.ques_image}}" width="60%"  alt="">
+</div>
+{% else %}
+<iframe src="{{ques.url}}" width="1000" height="600" frameborder="0"></iframe>
+{% endif %}
+{% endblock %}

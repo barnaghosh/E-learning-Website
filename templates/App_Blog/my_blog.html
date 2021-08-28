@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title_block %}
+{{user}}
+{% endblock %}
+{% block body_block %}
+{% if not user.post_block.all %}
+<h3>Sorry You don't post Blog Yet .Please Post a blog from <a href="{% url 'app_blog:create_blog' %}">Here</a> </h3>
+{% else %}
+{% for blog in user.post_block.all %}
+    <h3>{{blog.blog_title}} </h3>
+    <h5> {{blog.publish_date}} </h5>
+    <div class="row">
+        <div class="col-sm-4">
+            <img src="/media/{{blog.blog_image}}" alt="{{blog.blog_title}}" width="100%">
+        </div>
+        <div class="col-sm-8">
+            
+            <p> {{blog.blog_content|range_filter|linebreaks}} <a href="{% url 'app_blog:details' slug=blog.slug %}">Read More</a> </p>
+            <a href="{% url 'app_blog:edit_blog' pk=blog.pk %}">Edit</a>
+        </div>
+        </div>
+    
+{% endfor %}
+{% endif %}
+{% endblock %}
